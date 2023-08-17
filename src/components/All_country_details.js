@@ -7,8 +7,17 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import SelectedCountry from "./SelectedCountry";
 const AllCountryDetails = () => {
   const [country, setCountry] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
+  const handleCountryClick = (country) => {
+    setSelectedCountry(country);
+  };
+  const handleCloseModal = () => {
+    setSelectedCountry(null);
+  };
 
   useEffect(() => {
     const getNews = async () => {
@@ -36,7 +45,8 @@ const AllCountryDetails = () => {
           />
         </div>
         <div className="d-flex align-items-center">
-          <select>
+          <select style={{ padding: "8px" }}>
+            <option value="">Filter by region</option>
             {country.map((countryObj) => (
               <option key={countryObj.code} value={countryObj.code}>
                 {countryObj.continents[0]}
@@ -47,9 +57,17 @@ const AllCountryDetails = () => {
       </div>
       <Grid container spacing={6}>
         {country.map((countryInSingle) => (
-          <Grid item key={countryInSingle.name} xs={12} sm={6} md={4} lg={3}>
+          <Grid
+            item
+            key={countryInSingle.name}
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            onClick={() => handleCountryClick(countryInSingle)} 
+          >
             <Card>
-              <a href="!#">
+              <a>
                 <CardMedia
                   component="img"
                   alt="flag"
@@ -76,6 +94,7 @@ const AllCountryDetails = () => {
           </Grid>
         ))}
       </Grid>
+      {selectedCountry && <SelectedCountry country={selectedCountry} onClose={handleCloseModal} />}
     </>
   );
 };
